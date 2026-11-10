@@ -15,7 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. เพิ่มข้อมูลเวลาเปิด-ปิด
     addOpeningHours();
     setInterval(updateOpeningStatus, 60000); // อัปเดตสถานะเปิด-ปิดทุก 1 นาที
+
+    // 5. ป้องกันรูปภาพโหลดไม่ขึ้น (Fallback Image Handler)
+    setupImageFallback();
 });
+
+// ฟังก์ชันจัดการรูปภาพสำรองหากรูปภาพโหลดไม่สำเร็จ
+function setupImageFallback() {
+    const fallbackUrl = 'https://upload.wikimedia.org/wikipedia/commons/8/87/%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%AA%E0%B8%B2%E0%B8%97%E0%B8%A3%E0%B9%80%E0%B8%82%E0%B8%B2%E0%B8%9E%E0%B8%99%E0%B8%A1%E0%B8%A3%E0%B8%B8%E0%B9%89%E0%B8%87IDSC_0827.jpg';
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', function() {
+            if (!this.dataset.fallback) {
+                this.dataset.fallback = 'true';
+                this.src = fallbackUrl;
+            }
+        });
+    });
+}
 
 window.addEventListener('load', () => {
     // ซ่อนหน้า Loading Screen เมื่อโหลดเสร็จ
